@@ -4,7 +4,7 @@
  欢迎大佬前来视察进度
  
 + 交流QQ群：1050705995（获取最新版本、翻译器交流、解惑）
-+ 联系方式：QQ 394883561 —— Email 394883561@qq.com
++ 联系方式：QQ 2957768682 —— Email leilei.chui@gmail.com
 + 演示视频：[哔哩哔哩 BV1gp4y1Q7Ts](https://www.bilibili.com/video/BV1gp4y1Q7Ts)
 
 ### 和其他翻译软件比较有什么优缺点：
