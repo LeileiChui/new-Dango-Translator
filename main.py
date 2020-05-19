@@ -8,6 +8,7 @@
 import sys
 
 from PyQt5.QtWidgets import QWidget, QApplication
+import src.utils.utils as utils
 
 
 class Window(QWidget):
@@ -19,6 +20,7 @@ class Window(QWidget):
         return QCloseEvent.ignore()
 
 
+from PyQt5.QtGui import QIcon, QPixmap
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
