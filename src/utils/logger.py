@@ -7,6 +7,7 @@
 # -*- coding: utf-8 -*-
 import logging.handlers
 import os
+import sys
 
 time_level = 'S'
 time_interval = 10
@@ -28,19 +29,20 @@ class Logger(logging.Logger):
         fh.suffix = "%Y-%m-%d_%H-%M-%S.log"
         fh.setLevel(logging.DEBUG)
 
-        # 再创建一个handler，用于输出到控制台
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.DEBUG)
-
         # 定义handler的输出格式
         formatter = logging.Formatter(
             '[%(asctime)s] - %(filename)s [Line:%(lineno)d] - [%(levelname)s] - %(message)s')
-        fh.setFormatter(formatter)
-        ch.setFormatter(formatter)
 
-        # 给logger添加handler
+        fh.setFormatter(formatter)
         self.addHandler(fh)
-        self.addHandler(ch)
+        if getattr(sys, 'frozen', True):
+            # 如果是开发环境，再创建一个handler，用于输出到控制台
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.DEBUG)
+            ch.setFormatter(formatter)
+
+            # 给logger添加handler
+            self.addHandler(ch)
 
 
 logger = Logger()

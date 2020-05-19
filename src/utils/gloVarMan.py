@@ -5,6 +5,10 @@
 # @File : gloVarMan.py
 # @Software: PyCharm
 # -*- coding: utf-8 -*-
+import src.utils.utils as utils
+from src.utils.logger import logger
+
+config_path = 'config/config.json'
 
 
 class GloVarMan:
@@ -13,13 +17,26 @@ class GloVarMan:
     """
 
     def __init__(self):
-        self.config = {}
+        self.logger = logger
+        self.config = self.read_config()
+        self.screen_scale_rate = utils.get_screen_rate()
+        self.logger.info("读取配置文件")
 
-    def _read_config(self):
+    @staticmethod
+    def read_config():
         """
         读取配置文件
-        :return: dict: json
+        :return: dict
         """
+        return utils.read_config(config_path)
+
+    def save_config(self):
+        """
+        保存配置文件
+        :return: None
+        """
+        utils.save_config(config_path, self.config)
+        self.logger.info("保存配置文件")
 
 
 glm = GloVarMan()
