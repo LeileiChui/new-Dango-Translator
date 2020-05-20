@@ -5,25 +5,22 @@
 # @File : main.py
 # @Software: PyCharm
 # -*- coding: utf-8 -*-
+from src.main_IF import MainInterface
+from PyQt5.QtWidgets import QApplication
 import sys
 
-from PyQt5.QtWidgets import QWidget, QApplication
-import src.utils.utils as utils
+
+class DangoTranslator:
+    def __init__(self, app: QApplication):
+        self.app = app
+        self.main_IF = MainInterface()
+
+    def run(self):
+        self.main_IF.show()
+        sys.exit(app.exec_())
 
 
-class Window(QWidget):
-    def __init__(self):
-        super(Window, self).__init__()
-
-    def closeEvent(self, QCloseEvent):
-        self.hide()
-        return QCloseEvent.ignore()
-
-
-from PyQt5.QtGui import QIcon, QPixmap
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     app = QApplication(sys.argv)
-    w = Window()
-    w.show()
-    sys.exit(app.exec_())
+    dango = DangoTranslator(app)
+    dango.run()
