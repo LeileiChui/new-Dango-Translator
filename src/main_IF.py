@@ -26,10 +26,10 @@ class MainInterface(QtWidgets.QWidget):
         self.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         # 设置程序图标和光标
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(utils.resource_path('asserts/图标.ico')), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.icon = QtGui.QIcon()
+        self.icon.addPixmap(QtGui.QPixmap(utils.resource_path('asserts/图标.ico')), QtGui.QIcon.Normal, QtGui.QIcon.On)
         cursor = QtGui.QCursor(QtGui.QPixmap(utils.resource_path('asserts/光标.png')), 0, 0)
-        self.setWindowIcon(icon)
+        self.setWindowIcon(self.icon)
         self.setCursor(cursor)
         # 加载字体
         QtGui.QFontDatabase.addApplicationFont(utils.resource_path('asserts/华康方圆体W7.ttf'))
@@ -57,7 +57,6 @@ class MainInterface(QtWidgets.QWidget):
         self.dragLabel = QtWidgets.QLabel(self)
         self.dragLabel.setGeometry(0, 0, 4000, 4000)
         self.dragLabel.setObjectName('dragLabel')
-        self.dragLabel.setStyleSheet('QLabel{background-color:None}')
 
         # 顶部按钮
         toolbar_placeholder = QtWidgets.QWidget()
@@ -70,6 +69,10 @@ class MainInterface(QtWidgets.QWidget):
         self.toolbar_layout.setContentsMargins(0, 0, 0, 0)
         self.toolbar_layout.addSpacerItem(
             QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum))
+
+        self.start_btn = self.new_button('fa.play', '<b>开始翻译</b>')
+        # fa.square
+        self.toolbar_layout.addWidget(self.start_btn)
 
         self.play_voice_btn = self.new_button('fa.music', '<b>朗读原文</b><br>朗读识别到的原文')
         self.toolbar_layout.addWidget(self.play_voice_btn)
@@ -91,10 +94,13 @@ class MainInterface(QtWidgets.QWidget):
         self.set_btn = self.new_button('fa5s.cog', '<b>设置</b>')
         self.toolbar_layout.addWidget(self.set_btn)
 
-        self.donate_btn = self.new_button('fa5s.battery-half', '<b>充电</b><br>复制翻译结果')
+        self.donate_btn = self.new_button('fa5s.donate', 'yellow', '<b>充电</b><br>我要给团子充电支持！')
         self.toolbar_layout.addWidget(self.donate_btn)
 
-        self.exit_btn = self.new_button('fa5s.times', '<b>复制</b><br>复制翻译结果')
+        self.minus_btn = self.new_button('fa.minus', 'green', '<b>最小化</b>最小化到托盘')
+        self.toolbar_layout.addWidget(self.minus_btn)
+
+        self.exit_btn = self.new_button('fa5s.times', 'red', '<b>关闭</b><br>关闭团子翻译器')
         self.toolbar_layout.addWidget(self.exit_btn)
 
         self.toolbar_layout.addSpacerItem(
@@ -107,12 +113,6 @@ class MainInterface(QtWidgets.QWidget):
         self.translate_text.setObjectName('translate_text')
         self.translate_text.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.translate_text.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
-        self.translate_text.setStyleSheet("border-width:0;\
-                                                  border-style:outset;\
-                                                  border-top:0px solid #e8f3f9;\
-                                                  color:white;\
-                                                  font-weight: bold;\
-                                                  background-color:rgba(62, 62, 62, %f)" % self.translate_text_trans)
         self.translate_text.setFont(self.font)
         self.translate_text.mergeCurrentCharFormat(self.format)
         self.translate_text.append("团子翻译器 ver4.0 --- By：Leil, Forked form 胖次团子")
@@ -123,11 +123,12 @@ class MainInterface(QtWidgets.QWidget):
         # 右下角缩放按钮
         self.statusbar = QtWidgets.QStatusBar()
         self.statusbar.setMaximumHeight(10 * glm.screen_scale_rate)
-        self.statusbar.setStyleSheet('QStatusBar{background-color:rgba(62, 62, 62, %f)}' % self.translate_text_trans)
         self.main_layout.addWidget(self.statusbar)
 
-    def new_button(self, icon_type: str, tool_tip: str):
-        button = QtWidgets.QPushButton(qtawesome.icon(icon_type), '', self)
+        self.leaveEvent(QEvent=None)
+
+    def new_button(self, icon_type: str, color: str = 'black', tool_tip: str = ""):
+        button = QtWidgets.QPushButton(qtawesome.icon(icon_type, color=color), "", self)
         button.setIconSize(QtCore.QSize(self.tool_icon_size, self.tool_icon_size))
         button.setToolTip(tool_tip)
         button.setStyleSheet("background: transparent")
@@ -165,26 +166,30 @@ class MainInterface(QtWidgets.QWidget):
     def enterEvent(self, QEvent):
         for btn in self.buttons:
             btn.show()
-        self.dragLabel.setStyleSheet('QLabel#dragLabel {background-color:rgba(62, 62, 62, 0.3)}')
-        self.translate_text.setStyleSheet("border-width:0;\
-                                                  border-style:outset;\
-                                                  border-top:0px solid #e8f3f9;\
-                                                  color:white;\
-                                                  font-weight: bold;\
-                                                  background-color:rgba(0,0,0,0)")
-        self.statusbar.setStyleSheet('QStatusBar{background-color:rgba(0,0,0,0)}')
+        self.changeToHoverUI(True)
 
     def leaveEvent(self, QEvent):
         for btn in self.buttons:
             btn.hide()
-        self.dragLabel.setStyleSheet('QLabel{background-color:None}')
+        self.changeToHoverUI(False)
+
+    def changeToHoverUI(self, status: bool):
+        if not status:
+            trans = self.translate_text_trans
+        else:
+            trans = 0
         self.translate_text.setStyleSheet("border-width:0;\
                                                   border-style:outset;\
                                                   border-top:0px solid #e8f3f9;\
                                                   color:white;\
                                                   font-weight: bold;\
-                                                  background-color:rgba(62, 62, 62, %f)" % self.translate_text_trans)
-        self.statusbar.setStyleSheet('QStatusBar{background-color:rgba(62, 62, 62, %f)}' % self.translate_text_trans)
+                                                  background-color:rgba(62, 62, 62, %f)" % trans)
+
+        self.statusbar.setStyleSheet(
+            'QStatusBar{background-color:rgba(62, 62, 62,%f)}' % trans)
+
+        self.dragLabel.setStyleSheet(
+            'QLabel#dragLabel{background-color:rgba(62, 62, 62,%f)}' % (self.translate_text_trans - trans + 0.01))
 
 
 # Test

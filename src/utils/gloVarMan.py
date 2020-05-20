@@ -28,14 +28,14 @@ class GloVarMan:
         读取配置文件
         :return: dict
         """
-        return utils.read_config(config_path)
+        return utils.read_config(utils.resource_path(config_path))
 
     def save_config(self):
         """
         保存配置文件
         :return: None
         """
-        utils.save_config(config_path, self.config)
+        utils.save_config(utils.resource_path(config_path), self.config)
         self.logger.info("保存配置文件")
 
 
