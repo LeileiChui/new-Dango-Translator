@@ -32,9 +32,7 @@ class MainInterface(QtWidgets.QWidget):
         self.setWindowIcon(self.icon)
         self.setCursor(cursor)
         # 加载字体
-        QtGui.QFontDatabase.addApplicationFont(utils.resource_path('asserts/华康方圆体W7.ttf'))
-        self.font = QtGui.QFont()
-        self.font.setFamily('华康方圆体W7')
+        self.font = QtGui.QFont('华康方圆体W7')
         self.font.setPointSize(15)
         # 设置文本样式
         self.format = QtGui.QTextCharFormat()
@@ -93,7 +91,6 @@ class MainInterface(QtWidgets.QWidget):
 
         self.set_btn = self.new_button('fa5s.cog', '<b>设置</b>')
         self.toolbar_layout.addWidget(self.set_btn)
-
         self.donate_btn = self.new_button('fa5s.donate', 'yellow', '<b>充电</b><br>我要给团子充电支持！')
         self.toolbar_layout.addWidget(self.donate_btn)
 
