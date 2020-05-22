@@ -14,23 +14,17 @@ import src.utils.utils as utils
 class MyTray(QSystemTrayIcon):
     def __init__(self):
         super().__init__()
+        # self.parent_window = window
         try:
             self.setIcon(QIcon(utils.resource_path('asserts/光标.png')))
             self.activated.connect(self.iconClicked)
         except Exception as e:
             print(e)
 
-    def bind(self, window):
-        self.parent_window = window
-
-    def test(self):
-        try:
-            self.parent_window.show()
-        except Exception as e:
-            print(e)
 
     def iconClicked(self, reason):
         # 鼠标点击icon传递的信号会带有一个整形的值，1是表示单击右键，2是双击，3是单击左键，4是用鼠标中键点击"
-        print('click')
-        if reason == 3:  # 2是双击
-            self.test()
+        print('reason=%d' % reason)
+        return
+        if reason == 3:
+            return

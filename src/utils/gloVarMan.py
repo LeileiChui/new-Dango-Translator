@@ -7,6 +7,7 @@
 # -*- coding: utf-8 -*-
 import src.utils.utils as utils
 from src.utils.logger import logger
+from PyQt5.QtGui import QFont
 
 config_path = 'config/config.json'
 
@@ -21,6 +22,10 @@ class GloVarMan:
         self.config = self.read_config()
         self.screen_scale_rate = utils.get_screen_rate()
         self.logger.info("读取配置文件")
+        self.mainUI_font = QFont('华康方圆体W7')
+        self.mainUI_font.setPointSize(15)
+        self.setUI_font = QFont('华康方圆体W7')
+        self.setUI_font.setPointSize(12)
 
     @staticmethod
     def read_config():

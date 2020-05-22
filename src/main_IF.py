@@ -32,8 +32,7 @@ class MainInterface(QtWidgets.QWidget):
         self.setWindowIcon(self.icon)
         self.setCursor(cursor)
         # 加载字体
-        self.font = QtGui.QFont('华康方圆体W7')
-        self.font.setPointSize(15)
+        self.font = glm.mainUI_font
         # 设置文本样式
         self.format = QtGui.QTextCharFormat()
         self.format.setTextOutline(
